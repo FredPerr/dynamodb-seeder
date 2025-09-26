@@ -31,7 +31,7 @@ async function runSeedFile({ filePath, env }: RunnerOptions) {
 
 const program = new Command();
 
-program.name("dyno").description("CLI for running seed files").version("1.0.1");
+program.name("dyno").description("CLI for running seed files").version("1.0.2");
 
 program
 	.command("seed <file>")
