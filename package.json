@@ -43,15 +43,16 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.2.4",
 		"@types/node": "^24.5.2",
+		"commander": "^14.0.1",
+		"ts-node": "^10.9.2",
 		"typescript": "^5.9.2",
-		"vitest": "^3.2.4"
-	},
-	"dependencies": {
+		"vitest": "^3.2.4",
 		"@aws-sdk/client-dynamodb": "^3.893.0",
 		"@aws-sdk/lib-dynamodb": "^3.893.0",
-		"@aws-sdk/util-dynamodb": "^3.893.0",
-		"@faker-js/faker": "^10.0.0",
-		"commander": "^14.0.1",
-		"ts-node": "^10.9.2"
+		"@aws-sdk/util-dynamodb": "^3.893.0"
+	},
+	"dependencies": {},
+	"optionalDependencies": {
+		"@faker-js/faker": "^10.0.0"
 	}
 }
