@@ -19,6 +19,18 @@ export function toDemoEntity(item: any) {
 }
 // =================================
 
+// ============ Demo.ts ============
+class Demo {
+	id: string;
+	name: string;
+
+	constructor(id: string, name: string) {
+		this.id = id;
+		this.name = name;
+	}
+}
+// =================================
+
 export default async function ({ env }: { env?: string[] }) {
 	await seedDynamoDB({
 		environmentName: env ?? true,
@@ -33,12 +45,12 @@ export default async function ({ env }: { env?: string[] }) {
 							tableName: "dynamodb-seeder-demo",
 							items: [
 								{
-									data: { id: "1", name: "Item 1" },
+									data: new Demo("1", "Item 1"),
 									conflictStrategy: ConflictStrategy.Overwrite,
 									type: EntityType.DemoEntity,
 								},
 								{
-									data: { id: "2", name: "Item 2" },
+									data: new Demo("2", "Item 2"),
 									conflictStrategy: ConflictStrategy.Overwrite,
 									type: EntityType.DemoEntity,
 								},

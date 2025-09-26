@@ -1,4 +1,5 @@
 export enum ConflictStrategy {
-	Skip = "skip",
+	// Skip = "skip",
+	// Fail = "fail",
 	Overwrite = "overwrite",
 }

@@ -81,15 +81,18 @@ export default async function ({ env }: { env: string[] }) {
 
 ```ts
 // ./seeds/demo-seed.ts (or see src/demo.ts)
-import { seedDynamoDB, ConflictStrategy } from "dynamodb-seeder";
+import { ConflictStrategy } from "./ConflictStrategy.js";
+import { seedDynamoDB } from "./DynamoSeed.js";
 
-// Define entity types (optional but keeps things explicit)
+// ========= EntityType.ts =========
 enum EntityType {
   DemoEntity = "DemoEntity",
 }
+// =================================
 
-// Map your in-memory domain object to the DynamoDB item (including PK/SK and any GSIs)
-function toDemoEntity(item: { id: string; name: string }) {
+// ========= DemoEntity.ts =========
+// ...
+export function toDemoEntity(item: any) {
   return {
     PK: `DEMO#${item.id}`,
     SK: `DEMO#${item.id}`,
@@ -97,13 +100,25 @@ function toDemoEntity(item: { id: string; name: string }) {
     _et: EntityType.DemoEntity,
   };
 }
+// =================================
 
-export default async function ({ env }: { env: string[] }) {
+// ============ Demo.ts ============
+class Demo {
+  id: string;
+  name: string;
+
+  constructor(id: string, name: string) {
+    this.id = id;
+    this.name = name;
+  }
+}
+// =================================
+
+export default async function ({ env }: { env?: string[] }) {
   await seedDynamoDB({
-    // When multiple envs are supplied the underlying logic can decide how to apply them.
-    // Here we just forward the array; adapt if your seeding logic expects a single string.
-    environmentName: env,
+    environmentName: env ?? true,
     config: {
+      // endpointUrl: "http://localhost:8000",
       region: "ca-central-1",
       environments: [
         {
@@ -113,12 +128,12 @@ export default async function ({ env }: { env: string[] }) {
               tableName: "dynamodb-seeder-demo",
               items: [
                 {
-                  data: { id: "1", name: "Item 1" },
+                  data: new Demo("1", "Item 1"),
                   conflictStrategy: ConflictStrategy.Overwrite,
                   type: EntityType.DemoEntity,
                 },
                 {
-                  data: { id: "2", name: "Item 2" },
+                  data: new Demo("2", "Item 2"),
                   conflictStrategy: ConflictStrategy.Overwrite,
                   type: EntityType.DemoEntity,
                 },
@@ -133,6 +148,8 @@ export default async function ({ env }: { env: string[] }) {
     },
   });
 }
+
+
 ```
 
 Run it:
