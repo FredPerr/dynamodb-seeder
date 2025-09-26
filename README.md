@@ -50,11 +50,11 @@ You must supply at least one environment using `--env` / `-e`. The first provide
 
 Inside the seed file you receive the array plus convenience environment variables:
 
-| What | Description |
-|------|-------------|
-| `env` (function param) | `string[]` value passed to the default export |
+| What                    | Description                                                      |
+| ----------------------- | ---------------------------------------------------------------- |
+| `env` (function param)  | `string[]` value passed to the default export                    |
 | `process.env.DYNO_ENVS` | JSON string array of all environments (e.g. `["dev","staging"]`) |
-| `process.env.DYNO_ENV`  | First environment (primary) |
+| `process.env.DYNO_ENV`  | First environment (primary)                                      |
 
 ### Show Help
 
@@ -83,15 +83,16 @@ export default async function ({ env }: { env: string[] }) {
 // ./seeds/demo-seed.ts (or see src/demo.ts)
 import { ConflictStrategy } from "./ConflictStrategy.js";
 import { seedDynamoDB } from "./DynamoSeed.js";
+import { faker } from "@faker-js/faker"; // -- you can use faker to generate data.
 
 // ========= EntityType.ts =========
-enum EntityType {
-  DemoEntity = "DemoEntity",
-}
-// =================================
+export const EntityType = {
+  DemoEntity: "DemoEntity",
+} as const;
+
+export type EntityType = (typeof EntityType)[keyof typeof EntityType];
 
 // ========= DemoEntity.ts =========
-// ...
 export function toDemoEntity(item: any) {
   return {
     PK: `DEMO#${item.id}`,
@@ -100,8 +101,6 @@ export function toDemoEntity(item: any) {
     _et: EntityType.DemoEntity,
   };
 }
-// =================================
-
 // ============ Demo.ts ============
 class Demo {
   id: string;
@@ -128,12 +127,12 @@ export default async function ({ env }: { env?: string[] }) {
               tableName: "dynamodb-seeder-demo",
               items: [
                 {
-                  data: new Demo("1", "Item 1"),
+                  data: new Demo("1", faker.person.firstName()),
                   conflictStrategy: ConflictStrategy.Overwrite,
                   type: EntityType.DemoEntity,
                 },
                 {
-                  data: new Demo("2", "Item 2"),
+                  data: new Demo("2", faker.person.firstName()),
                   conflictStrategy: ConflictStrategy.Overwrite,
                   type: EntityType.DemoEntity,
                 },
@@ -148,14 +147,12 @@ export default async function ({ env }: { env?: string[] }) {
     },
   });
 }
-
-
 ```
 
 Run it:
 
 ```bash
-dyno seed ./seeds/demo-seed.ts --env dev
+dyno seed ./seeds/demo-seed.ts --env demo-env
 ```
 
 ---

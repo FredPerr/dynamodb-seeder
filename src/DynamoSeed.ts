@@ -26,10 +26,12 @@ async function seedEnvironment(env: Environment, repository: DynamoRepository) {
 
 	if (failedBatches > 0) {
 		console.warn(
-			`Seeding completed for environment: ${env.name} with ${failedBatches} failed batches.`,
+			`⚠️ Seeding completed for environment: ${env.name} with ${failedBatches} failed batches.`,
 		);
 	} else {
-		console.info(`Seeding completed successfully for environment: ${env.name}`);
+		console.info(
+			`✅ Seeding completed successfully for environment: ${env.name}`,
+		);
 	}
 }
 
