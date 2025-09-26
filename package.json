@@ -1,0 +1,45 @@
+{
+  "name": "dynamodb-seeder",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FredPerr/dynamodb-seeder.git"
+  },
+  "author": "Frederic Perron",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FredPerr/dynamodb-seeder/issues"
+  },
+  "homepage": "https://github.com/FredPerr/dynamodb-seeder#readme",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "demo": "tsc && node ./dist/demo.js",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest --no-watch run tests",
+    "lint": "biome check",
+    "lint:fix": "biome format --write",
+    "local-db": "cd local-db && java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb",
+    "seed": "ts-node src/cli.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.4",
+    "@types/node": "^24.5.2",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@aws-sdk/util-dynamodb": "^3.893.0",
+    "@aws-sdk/client-dynamodb": "^3.893.0",
+    "@aws-sdk/lib-dynamodb": "^3.893.0",
+    "@faker-js/faker": "^10.0.0"
+  }
+}
