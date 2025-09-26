@@ -80,13 +80,29 @@ export default async function ({ env }: { env: string[] }) {
 ### Example Seed File
 
 ```ts
-// ./seeds/demo-seed.ts
-import { seedDynamoDB } from "dynamodb-seeder"; // adjust path if using sources locally
-import { ConflictStrategy } from "dynamodb-seeder";
+// ./seeds/demo-seed.ts (or see src/demo.ts)
+import { seedDynamoDB, ConflictStrategy } from "dynamodb-seeder";
+
+// Define entity types (optional but keeps things explicit)
+enum EntityType {
+  DemoEntity = "DemoEntity",
+}
+
+// Map your in-memory domain object to the DynamoDB item (including PK/SK and any GSIs)
+function toDemoEntity(item: { id: string; name: string }) {
+  return {
+    PK: `DEMO#${item.id}`,
+    SK: `DEMO#${item.id}`,
+    name: item.name,
+    _et: EntityType.DemoEntity,
+  };
+}
 
 export default async function ({ env }: { env: string[] }) {
   await seedDynamoDB({
-    environmentName: env, // always a string[] now
+    // When multiple envs are supplied the underlying logic can decide how to apply them.
+    // Here we just forward the array; adapt if your seeding logic expects a single string.
+    environmentName: env,
     config: {
       region: "ca-central-1",
       environments: [
@@ -99,22 +115,16 @@ export default async function ({ env }: { env: string[] }) {
                 {
                   data: { id: "1", name: "Item 1" },
                   conflictStrategy: ConflictStrategy.Overwrite,
-                  type: "DemoEntity",
+                  type: EntityType.DemoEntity,
                 },
                 {
                   data: { id: "2", name: "Item 2" },
                   conflictStrategy: ConflictStrategy.Overwrite,
-                  type: "DemoEntity",
+                  type: EntityType.DemoEntity,
                 },
               ],
               mappers: {
-                // Should be the mapper of the domain model to the entity data (including indexes)
-                DemoEntity: (item) => ({
-                  PK: `DEMO#${item.id}`,
-                  SK: `DEMO#${item.id}`,
-                  name: item.name,
-                  _et: "DemoEntity",
-                }),
+                [EntityType.DemoEntity]: toDemoEntity,
               },
             },
           ],

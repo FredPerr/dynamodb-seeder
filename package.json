@@ -9,8 +9,16 @@
 		"type": "git",
 		"url": "git+https://github.com/FredPerr/dynamodb-seeder.git"
 	},
-	"author": "Frederic Perron",
-	"license": "ISC",
+	"files": [
+		"dist"
+	],
+	"keywords": [
+		"dynamodb",
+		"cli",
+		"seed"
+	],
+	"author": "Fred Perron",
+	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/FredPerr/dynamodb-seeder/issues"
 	},
